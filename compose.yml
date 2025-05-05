@@ -1,0 +1,27 @@
+name: node
+networks:
+  main:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.5.0.0/16
+services:
+  nginx:
+    container_name: nginx
+    image: 'jc21/nginx-proxy-manager:latest'
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 128m
+    networks:
+      main:
+        ipv4_address: 10.5.0.11
+    ports:
+      - '8001:81'
+    environment:
+      INITIAL_ADMIN_EMAIL: admin@node
+      INITIAL_ADMIN_PASSWORD: admin
+    volumes:
+      - ./nginx/data:/data/
+      - ./nginx/letsencrypt:/etc/letsencrypt/

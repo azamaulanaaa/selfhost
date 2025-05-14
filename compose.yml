@@ -9,4 +9,4 @@ services:
         limits:
           memory: 128m
     volumes:
-      - ./nginx/conf.d/:/etc/nginx/conf.d/
+      - ./nginx/templates/:/etc/nginx/templates/:ro

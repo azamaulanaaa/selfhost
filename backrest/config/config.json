@@ -1,0 +1,8 @@
+{
+  "modno": 1,
+  "version": 4,
+  "instance": "backrest",
+  "auth": {
+    "disabled": true
+  }
+}

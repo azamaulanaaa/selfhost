@@ -12,8 +12,10 @@ services:
       - ./nginx/templates/:/etc/nginx/templates/:ro
     environment:
       - TINYAUTH_DOMAIN=${TINYAUTH_DOMAIN}
+      - BACKREST_DOMAIN=${BACKREST_DOMAIN}
     depends_on:
-    - tinyauth
+      - tinyauth
+      - backrest
   tinyauth:
     container_name: tinyauth
     image: ghcr.io/steveiliop56/tinyauth:v3
@@ -28,4 +30,21 @@ services:
       - APP_URL=https://${TINYAUTH_DOMAIN}
       - SECRET=${TINYAUTH_SECRET}
       - USERS=${TINYAUTH_USERS}
-
+  backrest:
+    container_name: backrest
+    image: garethgeorge/backrest
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 256m
+    volumes:
+      - ./backrest/data:/data
+      - ./backrest/config:/config
+      - ./backrest/cache:/cache
+      - ./backrest/repos:/repos
+      - .:/userdata
+    environment:
+      - BACKREST_DATA=/data
+      - BACKREST_CONFIG=/config/config.json
+      - XDG_CACHE_HOME=/cache

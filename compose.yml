@@ -67,7 +67,7 @@ services:
         ipv4_address: 10.5.0.102
     volumes:
       - ./backrest/data:/data
-      - ./backrest/config:/config
+      - ./backrest/config:/config:ro
       - ./backrest/cache:/cache
       - ./backrest/repos:/repos
       - .:/userdata
@@ -87,7 +87,7 @@ services:
       main:
         ipv4_address: 10.5.0.103
     volumes:
-      - ./dufs/config:/config
+      - ./dufs/config:/config:ro
       - ./dufs/data:/data
       - ./aria2/data:/data/downloads
     environment:
@@ -110,6 +110,6 @@ services:
       - ARIA2RPCPORT=443
     volumes:
       - ./aria2/data:/aria2/data
-      - ./aria2/config:/aria2/conf
+      - ./aria2/config:/aria2/conf:ro
     profiles:
       - aria2

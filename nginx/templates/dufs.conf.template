@@ -1,0 +1,28 @@
+server {
+    listen 80;
+    server_name ${DUFS_DOMAIN};
+
+    client_max_body_size 0;
+
+    location / {
+        proxy_pass http://10.5.0.103:5000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+        auth_request /auth;
+        error_page 401 = @tinyauth_login;
+    }
+
+    location /auth {
+        proxy_pass http://10.5.0.101:3000/api/auth/nginx;
+        proxy_set_header x-forwarded-proto $scheme;
+        proxy_set_header x-forwarded-host $http_host;
+        proxy_set_header x-forwarded-uri $request_uri;
+    }
+
+    location @tinyauth_login {
+        internal;
+        return 302  https://${TINYAUTH_DOMAIN}/login?redirect_uri=https://${DUFS_DOMAIN};
+    }
+}

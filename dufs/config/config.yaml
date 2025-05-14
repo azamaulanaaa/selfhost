@@ -1,0 +1,13 @@
+bind: 0.0.0.0
+port: 5000
+auth:
+  - '@/:rw'
+allow-all: false
+allow-upload: true
+allow-delete: true
+allow-search: true
+allow-symlink: true
+allow-archive: false
+enable-cors: false
+render-try-index: true
+render-spa: true

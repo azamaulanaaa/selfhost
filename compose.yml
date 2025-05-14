@@ -75,3 +75,22 @@ services:
       - BACKREST_DATA=/data
       - BACKREST_CONFIG=/config/config.json
       - XDG_CACHE_HOME=/cache
+  dufs:
+    container_name: dufs
+    image: sigoden/dufs
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 256m
+    networks:
+      main:
+        ipv4_address: 10.5.0.103
+    volumes:
+      - ./dufs/config:/config
+      - ./dufs/data:/data
+    environment:
+      - DUFS_CONFIG=/config/config.yaml
+      - DUFS_SERVE_PATH=/data
+    profiles:
+      - dufs

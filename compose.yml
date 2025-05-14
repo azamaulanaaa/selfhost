@@ -89,8 +89,27 @@ services:
     volumes:
       - ./dufs/config:/config
       - ./dufs/data:/data
+      - ./aria2/data:/data/downloads
     environment:
       - DUFS_CONFIG=/config/config.yaml
       - DUFS_SERVE_PATH=/data
     profiles:
       - dufs
+  aria2:
+    container_name: aria2
+    image: hurlenko/aria2-ariang
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 256m
+    networks:
+      main:
+        ipv4_address: 10.5.0.104
+    environment:
+      - ARIA2RPCPORT=443
+    volumes:
+      - ./aria2/data:/aria2/data
+      - ./aria2/config:/aria2/conf
+    profiles:
+      - aria2

@@ -10,3 +10,22 @@ services:
           memory: 128m
     volumes:
       - ./nginx/templates/:/etc/nginx/templates/:ro
+    environment:
+      - TINYAUTH_DOMAIN=${TINYAUTH_DOMAIN}
+    depends_on:
+    - tinyauth
+  tinyauth:
+    container_name: tinyauth
+    image: ghcr.io/steveiliop56/tinyauth:v3
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 16m
+    environment:
+      - DISABLE_CONTINUE=true
+      - COOKIE_SECURE=true
+      - APP_URL=https://${TINYAUTH_DOMAIN}
+      - SECRET=${TINYAUTH_SECRET}
+      - USERS=${TINYAUTH_USERS}
+

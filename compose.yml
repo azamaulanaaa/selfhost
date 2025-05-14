@@ -11,6 +11,10 @@ services:
     image: cloudflare/cloudflared
     restart: unless-stopped
     command: tunnel run
+    deploy:
+      resources:
+        limits:
+          memory: 128m
     networks:
       main:
         ipv4_address: 10.5.0.12
@@ -27,7 +31,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 128m
+          memory: 32m
     networks:
       main:
         ipv4_address: 10.5.0.11

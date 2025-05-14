@@ -110,6 +110,7 @@ services:
       - ARIA2RPCPORT=443
     volumes:
       - ./aria2/data:/aria2/data
+      - ./aria2/session:/aria2/session
       - ./aria2/config:/aria2/conf:ro
     profiles:
       - aria2

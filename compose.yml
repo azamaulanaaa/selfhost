@@ -1,5 +1,25 @@
 name: node
+networks:
+  main:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.5.0.0/16
 services:
+  cloudflared:
+    container_name: cloudflared
+    image: cloudflare/cloudflared
+    restart: unless-stopped
+    command: tunnel run
+    networks:
+      main:
+        ipv4_address: 10.5.0.12
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARED_TOKEN}
+    depends_on:
+      - nginx
+    profiles:
+      - cloudflared
   nginx:
     container_name: nginx
     image: nginx
@@ -8,14 +28,15 @@ services:
       resources:
         limits:
           memory: 128m
+    networks:
+      main:
+        ipv4_address: 10.5.0.11
     volumes:
       - ./nginx/templates/:/etc/nginx/templates/:ro
     environment:
       - TINYAUTH_DOMAIN=${TINYAUTH_DOMAIN}
       - BACKREST_DOMAIN=${BACKREST_DOMAIN}
-    depends_on:
-      - tinyauth
-      - backrest
+      - DUFS_DOMAIN=${DUFS_DOMAIN}
   tinyauth:
     container_name: tinyauth
     image: ghcr.io/steveiliop56/tinyauth:v3
@@ -24,6 +45,9 @@ services:
       resources:
         limits:
           memory: 16m
+    networks:
+      main:
+        ipv4_address: 10.5.0.101
     environment:
       - DISABLE_CONTINUE=true
       - COOKIE_SECURE=true
@@ -38,6 +62,9 @@ services:
       resources:
         limits:
           memory: 256m
+    networks:
+      main:
+        ipv4_address: 10.5.0.102
     volumes:
       - ./backrest/data:/data
       - ./backrest/config:/config
@@ -48,12 +75,3 @@ services:
       - BACKREST_DATA=/data
       - BACKREST_CONFIG=/config/config.json
       - XDG_CACHE_HOME=/cache
-  cloudflared:
-    container_name: cloudflared
-    image: cloudflare/cloudflared
-    restart: unless-stopped
-    command: tunnel run
-    environment:
-      - TUNNEL_TOKEN=${CLOUDFLARED_TOKEN}
-    profiles:
-      - cloudflared

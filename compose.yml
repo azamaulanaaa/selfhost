@@ -2,7 +2,7 @@ name: node
 services:
   nginx:
     container_name: nginx
-    image: nginx 
+    image: nginx
     restart: unless-stopped
     deploy:
       resources:
@@ -48,3 +48,12 @@ services:
       - BACKREST_DATA=/data
       - BACKREST_CONFIG=/config/config.json
       - XDG_CACHE_HOME=/cache
+  cloudflared:
+    container_name: cloudflared
+    image: cloudflare/cloudflared
+    restart: unless-stopped
+    command: tunnel run
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARED_TOKEN}
+    profiles:
+      - cloudflared

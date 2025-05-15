@@ -96,6 +96,8 @@ services:
       - BACKREST_DATA=/data
       - BACKREST_CONFIG=/config/config.json
       - XDG_CACHE_HOME=/cache
+    profiles:
+      - backrest
   dufs:
     container_name: dufs
     image: sigoden/dufs
@@ -114,8 +116,6 @@ services:
     environment:
       - DUFS_CONFIG=/config/config.yaml
       - DUFS_SERVE_PATH=/data
-    profiles:
-      - dufs
   aria2:
     container_name: aria2
     image: hurlenko/aria2-ariang

@@ -6,6 +6,23 @@ networks:
       config:
         - subnet: 10.5.0.0/16
 services:
+  tinyproxy:
+    container_name: tinyproxy
+    image: registry.gitlab.com/kalaksi-containers/tinyproxy
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 16m
+    networks:
+      main:
+        ipv4_address: 10.5.0.13
+    ports:
+      - 8013:8888
+    volumes:
+      - ./tinyproxy/config/tinyproxy.conf:/etc/tinyproxy/tinyproxy.conf
+    profiles:
+      - tinyproxy
   cloudflared:
     container_name: cloudflared
     image: cloudflare/cloudflared
@@ -118,18 +135,3 @@ services:
       - ./aria2/config:/aria2/conf:ro
     profiles:
       - aria2
-  tinyproxy:
-    container_name: tinyproxy
-    image: registry.gitlab.com/kalaksi-containers/tinyproxy
-    restart: unless-stopped
-    deploy:
-      resources:
-        limits:
-          memory: 16m
-    networks:
-      main:
-        ipv4_address: 10.5.0.105
-    volumes:
-      - ./tinyproxy/config/tinyproxy.conf:/etc/tinyproxy/tinyproxy.conf
-    profiles:
-      - tinyproxy

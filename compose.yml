@@ -116,6 +116,8 @@ services:
     environment:
       - DUFS_CONFIG=/config/config.yaml
       - DUFS_SERVE_PATH=/data
+    profiles:
+      - dufs
   aria2:
     container_name: aria2
     image: hurlenko/aria2-ariang

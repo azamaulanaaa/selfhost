@@ -20,7 +20,7 @@ services:
     ports:
       - 8013:8888
     volumes:
-      - ./tinyproxy/config/tinyproxy.conf:/etc/tinyproxy/tinyproxy.conf
+      - ${BASE_DIR}/config/tinyproxy/tinyproxy.conf:/etc/tinyproxy/tinyproxy.conf:ro
     profiles:
       - tinyproxy
   cloudflared:
@@ -53,7 +53,7 @@ services:
       main:
         ipv4_address: 10.5.0.11
     volumes:
-      - ./nginx/templates/:/etc/nginx/templates/:ro
+      - ${BASE_DIR}/config/nginx/templates/:/etc/nginx/templates/:ro
     environment:
       - TINYAUTH_DOMAIN=${TINYAUTH_DOMAIN}
       - BACKREST_DOMAIN=${BACKREST_DOMAIN}
@@ -87,11 +87,11 @@ services:
       main:
         ipv4_address: 10.5.0.102
     volumes:
-      - ./backrest/data:/data
-      - ./backrest/config:/config:ro
-      - ./backrest/cache:/cache
-      - ./backrest/repos:/repos
-      - .:/userdata
+      - ${BASE_DIR}/config/backrest:/config:ro
+      - ${BASE_DIR}/data/backrest/data:/data
+      - ${BASE_DIR}/data/backrest/cache:/cache
+      - ${BASE_DIR}/data/backrest/repos:/repos
+      - ${BASE_DIR}/data:/userdata
     environment:
       - BACKREST_DATA=/data
       - BACKREST_CONFIG=/config/config.json
@@ -110,9 +110,9 @@ services:
       main:
         ipv4_address: 10.5.0.103
     volumes:
-      - ./dufs/config:/config:ro
-      - ./dufs/data:/data
-      - ./aria2/data:/data/downloads
+      - ${BASE_DIR}/config/dufs:/config:ro
+      - ${BASE_DIR}/data/dufs:/data
+      - ${BASE_DIR}/data/aria2/data:/data/downloads
     environment:
       - DUFS_CONFIG=/config/config.yaml
       - DUFS_SERVE_PATH=/data
@@ -132,8 +132,8 @@ services:
     environment:
       - ARIA2RPCPORT=443
     volumes:
-      - ./aria2/data:/aria2/data
-      - ./aria2/session:/aria2/session
-      - ./aria2/config:/aria2/conf:ro
+      - ${BASE_DIR}/config/aria2:/aria2/conf:ro
+      - ${BASE_DIR}/data/aria2/data:/aria2/data
+      - ${BASE_DIR}/data/aria2/session:/aria2/session
     profiles:
       - aria2

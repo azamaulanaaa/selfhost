@@ -22,7 +22,7 @@ Follow these steps to get your services up and running.
 
 ### 1. Clone the Repository
 
-First, clone this repository to your desired location on your system. This location will be referred to as `${BASE_DIR}`.
+First, clone this repository to your desired location on your system.
 
 ```sh
 git clone https://github.com/azamaulanaaa/selfhost
@@ -41,7 +41,6 @@ The services rely on environment variables for configuration.
 
 2. **Edit .env**: Open the newly created .env file and populate it with your specific values. Pay close attention to the following:
 
-    - `BASE_DIR`: This should be the absolute path to the root directory of this repository on your system. For example, if you cloned the repository to `/home/user/my-services`, then `BASE_DIR=/home/user/my-services`.
     - `TINYAUTH_SECRET`: This is a critical security key. It **MUST be exactly 32 characters long**. Generate a strong, random hexadecimal string.
       - **Python**: `python -c 'import os; print(os.urandom(16).hex())'` (This generates 32 hex characters)
       - **OpenSSL**: `openssl rand -hex 16` (This generates 32 hex characters)

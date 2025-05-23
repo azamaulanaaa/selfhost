@@ -5,7 +5,8 @@ This repository contains the Docker Compose configuration and environment variab
 - TinyAuth: A lightweight authentication service.
 - TinyProxy: A simple HTTP/HTTPS proxy.
 - Cloudflared: Connects your services to Cloudflare Tunnel for secure, public access.
-- Nginx: A reverse proxy to route traffic to your services.Backrest: A flexible backup solution.
+- Nginx: A reverse proxy to route traffic to your services.
+- Backrest: A flexible backup solution.
 - DUFS (Dockerized Upload File Server): A simple file server for uploads and downloads.
 - Aria2: A versatile command-line download manager with a web UI (AriaNg).
 

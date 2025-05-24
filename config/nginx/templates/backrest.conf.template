@@ -3,7 +3,7 @@ server {
     server_name ${BACKREST_DOMAIN};
 
     location / {
-        proxy_pass http://10.5.0.102:9898;
+        proxy_pass http://backrest:9898;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -13,7 +13,7 @@ server {
     }
 
     location /auth {
-        proxy_pass http://10.5.0.101:3000/api/auth/nginx;
+        proxy_pass http://tinyauth:3000/api/auth/nginx;
         proxy_set_header x-forwarded-proto $scheme;
         proxy_set_header x-forwarded-host $http_host;
         proxy_set_header x-forwarded-uri $request_uri;

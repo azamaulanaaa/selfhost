@@ -24,6 +24,11 @@ services:
     profiles:
       - tinyproxy
       - aria2
+    extra_hosts:
+      - ${TINYAUTH_DOMAIN}:10.5.0.11
+      - ${BACKREST_DOMAIN}:10.5.0.11
+      - ${DUFS_DOMAIN}:10.5.0.11
+      - ${ARIA2_DOMAIN}:10.5.0.11
   cloudflared:
     container_name: cloudflared
     image: cloudflare/cloudflared
@@ -60,6 +65,11 @@ services:
       - BACKREST_DOMAIN=${BACKREST_DOMAIN}
       - DUFS_DOMAIN=${DUFS_DOMAIN}
       - ARIA2_DOMAIN=${ARIA2_DOMAIN}
+    extra_hosts:
+      - tinyauth:10.5.0.101
+      - backrest:10.5.0.102
+      - dufs:10.5.0.103
+      - aria2:10.5.0.104
   tinyauth:
     container_name: tinyauth
     image: ghcr.io/steveiliop56/tinyauth:v3

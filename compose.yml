@@ -21,9 +21,6 @@ services:
       - 8013:8888
     volumes:
       - ./config/tinyproxy/tinyproxy.conf:/etc/tinyproxy/tinyproxy.conf:ro
-    profiles:
-      - tinyproxy
-      - aria2
     extra_hosts:
       - ${TINYAUTH_DOMAIN}:10.5.0.11
       - ${BACKREST_DOMAIN}:10.5.0.11
@@ -86,6 +83,8 @@ services:
       - APP_URL=https://${TINYAUTH_DOMAIN}
       - SECRET=${TINYAUTH_SECRET}
       - USERS=${TINYAUTH_USERS}
+    profiles:
+      - tinyauth
   backrest:
     container_name: backrest
     image: garethgeorge/backrest

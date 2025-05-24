@@ -59,6 +59,7 @@ services:
       - TINYAUTH_DOMAIN=${TINYAUTH_DOMAIN}
       - BACKREST_DOMAIN=${BACKREST_DOMAIN}
       - DUFS_DOMAIN=${DUFS_DOMAIN}
+      - ARIA2_DOMAIN=${ARIA2_DOMAIN}
   tinyauth:
     container_name: tinyauth
     image: ghcr.io/steveiliop56/tinyauth:v3

@@ -23,6 +23,6 @@ server {
 
     location @tinyauth_login {
         internal;
-        return 302  https://${TINYAUTH_DOMAIN}/login?redirect_uri=$scheme://$http_host$request_uri;
+        return 302  $scheme://${TINYAUTH_DOMAIN}/login?redirect_uri=$scheme://$http_host$request_uri;
     }
 }

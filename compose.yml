@@ -65,6 +65,8 @@ services:
       - backrest:10.5.0.102
       - dufs:10.5.0.103
       - aria2:10.5.0.104
+    profiles:
+      - nginx
   tinyauth:
     container_name: tinyauth
     image: ghcr.io/steveiliop56/tinyauth:v3

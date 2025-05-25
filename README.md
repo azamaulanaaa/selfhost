@@ -101,7 +101,8 @@ To stop all services:
 docker compose -f compose.yaml --profile "*" down
 ```
 
-Accessing Your Services
+## Accessing Your Services
+
 Your services will be accessible via the domains you configured in your .env file, routed through Cloudflare Tunnel.
 
 - TinyAuth: `https://${TINYAUTH_DOMAIN}`

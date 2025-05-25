@@ -64,12 +64,12 @@ Your compose.yaml file utilizes Docker Compose profiles, which allow you to sele
 
 By default, when no profiles are specified, Docker Compose runs services that do not have a profiles key defined. In your setup, these services are:
 
-- `nginx`
-- `tinyauth`
+- `tinyproxy`
 
 The following services are associated with specific profiles and will only run when their respective profile (or a combination of profiles) is explicitly activated:
 
-- `tinyproxy`: For the TinyProxy service.
+- `nginx`: For the Nginx reverse proxy.
+- `tinyauth`: For the Tinyauth authentication.
 - `cloudflared`: For the Cloudflared tunnel service.
 - `backrest`: For the Backrest backup service.
 - `dufs`: For the DUFS file server.
@@ -78,8 +78,8 @@ The following services are associated with specific profiles and will only run w
 To start services associated with a specific profile, use the --profile (or -p) option:
 
 ```sh
-# Start only the TinyProxy service
-docker compose -f compose.yaml --profile tinyproxy up -d
+# Start only the Nginx service
+docker compose -f compose.yaml --profile nginx up -d
 ```
 
 ```sh

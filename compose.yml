@@ -26,6 +26,7 @@ services:
       - ${BACKREST_DOMAIN}:10.5.0.11
       - ${DUFS_DOMAIN}:10.5.0.11
       - ${ARIA2_DOMAIN}:10.5.0.11
+      - ${LLDAP_DOMAIN}:10.5.0.11
   cloudflared:
     container_name: cloudflared
     image: cloudflare/cloudflared
@@ -60,11 +61,13 @@ services:
       - BACKREST_DOMAIN=${BACKREST_DOMAIN}
       - DUFS_DOMAIN=${DUFS_DOMAIN}
       - ARIA2_DOMAIN=${ARIA2_DOMAIN}
+      - LLDAP_DOMAIN=${LLDAP_DOMAIN}
     extra_hosts:
       - tinyauth:10.5.0.101
       - backrest:10.5.0.102
       - dufs:10.5.0.103
       - aria2:10.5.0.104
+      - lldap:10.5.0.105
     profiles:
       - nginx
   tinyauth:
@@ -147,3 +150,24 @@ services:
       - ./data/aria2/session:/aria2/session
     profiles:
       - aria2
+  lldap:
+    container_name: lldap
+    image: lldap/lldap:stable
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 32m
+    networks:
+      main:
+        ipv4_address: 10.5.0.105
+    environment:
+      - LLDAP_JWT_SECRET=${LLDAP_JWT_SECRET}
+      - LLDAP_KEY_SEED=${LLDAP_KEY_SEED}
+      - LLDAP_LDAP_BASE_DN=${LLDAP_LDAP_BASE_DN}
+      - LLDAP_LDAP_USER_EMAIL=${LLDAP_LDAP_USER_EMAIL}
+      - LLDAP_LDAP_USER_PASS=${LLDAP_LDAP_USER_PASS}
+    volumes:
+      - ./data/lldap:/data'
+    profiles:
+      - lldap

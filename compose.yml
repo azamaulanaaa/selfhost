@@ -168,6 +168,6 @@ services:
       - LLDAP_LDAP_USER_EMAIL=${LLDAP_LDAP_USER_EMAIL}
       - LLDAP_LDAP_USER_PASS=${LLDAP_LDAP_USER_PASS}
     volumes:
-      - ./data/lldap:/data'
+      - ./data/lldap:/data
     profiles:
       - lldap

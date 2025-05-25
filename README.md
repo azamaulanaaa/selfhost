@@ -42,21 +42,29 @@ The services rely on environment variables for configuration.
 
 2. **Edit .env**: Open the newly created .env file and populate it with your specific values. Pay close attention to the following:
 
-    - `TINYAUTH_SECRET`: This is a critical security key. It **MUST be exactly 32 characters long**. Generate a strong, random hexadecimal string.
-      - **Python**: `python -c 'import os; print(os.urandom(16).hex())'` (This generates 32 hex characters)
-      - **OpenSSL**: `openssl rand -hex 16` (This generates 32 hex characters)
-    - `TINYAUTH_USERS`: Define your user credentials in the format `username:hashed-password`. You can define multiple users separated by commas.
-    - **Generate Hashed Password**: Use the TinyAuth CLI tool to create a hashed password interactively:
-        ```sh
-        docker run -it --rm ghcr.io/steveiliop56/tinyauth:v3 user create --interactive
-        ```
-        Follow the prompts. For example, if you enter admin for username and admin for password, it will output a string like `admin:$$2a$$10$$tH5JnZZ/sfuLIZbO9xxW6uYwkqSI71GrZ..1aQYPM2viQRgbZLMiO`. Copy this entire string into your `.env` file.
-    - `CLOUDFLARED_TOKEN`: Obtain this token from your Cloudflare dashboard when setting up a Cloudflare Tunnel.
-        1. Log in to your Cloudflare dashboard.
-        2. Navigate to 'Access' -> 'Tunnels'.
-        3. Create a new tunnel or select an existing one.
-        4. The token will be provided in the setup instructions (e.g., as part of the `cloudflared tunnel run <TUNNEL_NAME>` command).
-    - Domain Variables (`TINYAUTH_DOMAIN`, `DUFS_DOMAIN`, `BACKREST_DOMAIN`, `ARIA2_DOMAIN`): Set these to the fully qualified domain names (FQDNs) you intend to use for each service (e.g., `auth.yourdomain.com`, `files.yourdomain.com`). Ensure these domains are configured in your Cloudflare DNS to point to your Cloudflare Tunnel.
+    - TinyAuth Configuration (`TINYAUTH_SECRET`, `TINYAUTH_USERS`):
+        - `TINYAUTH_SECRET`: This is a critical security key. It **MUST be exactly 32 characters long**. Generate a strong, random hexadecimal string.
+            - **Python**: `python -c 'import os; print(os.urandom(16).hex())'` (This generates 32 hex characters)
+            - **OpenSSL**: `openssl rand -hex 16` (This generates 32 hex characters)
+        - `TINYAUTH_USERS`: Define your user credentials in the format `username:hashed-password`. You can define multiple users separated by commas.
+            - **Generate Hashed Password**: Use the TinyAuth CLI tool to create a hashed password interactively:
+                ```sh
+                docker run -it --rm ghcr.io/steveiliop56/tinyauth:v3 user create --interactive
+                ```
+                Follow the prompts. For example, if you enter admin for username and admin for password, it will output a string like `admin:$$2a$$10$$tH5JnZZ/sfuLIZbO9xxW6uYwkqSI71GrZ..1aQYPM2viQRgbZLMiO`. Copy this entire string into your `.env` file.
+    - Cloudflared Configuration (`CLOUDFLARED_TOKEN`):
+        - `CLOUDFLARED_TOKEN`: Obtain this token from your Cloudflare dashboard when setting up a Cloudflare Tunnel.
+            1. Log in to your Cloudflare dashboard.
+            2. Navigate to 'Access' -> 'Tunnels'.
+            3. Create a new tunnel or select an existing one.
+            4. The token will be provided in the setup instructions (e.g., as part of the `cloudflared tunnel run <TUNNEL_NAME>` command).
+    - LLDAP Configuration (`LLDAP_JWT_SECRET`, `LLDAP_KEY_SEED`, `LLDAP_LDAP_BASE_DN`, `LLDAP_LDAP_USER_EMAIL`, `LLDAP_LDAP_USER_PASS`):
+        - `LLDAP_JWT_SECRET`: A strong, random key for LLDAP's JWT signing. Generate using: `openssl rand -base64 32`
+        - `LLDAP_KEY_SEED`: A random seed for LLDAP key generation. Generate using: `head /dev/urandom | tr -dc A-Za-z0-9_ | head -c 32 ; echo`
+        - `LLDAP_LDAP_BASE_DN`: The base distinguished name for your LDAP directory (e.g., `dc=example,dc=com`). `dc=local` is a common default for simple setups.
+        - `LLDAP_LDAP_USER_EMAIL`: The email address for the initial LLDAP admin user. `admin@local` is a common default for simple setups
+        - `LLDAP_LDAP_USER_PASS`: The password for the initial LLDAP admin user.
+    - Domain Variables (`TINYAUTH_DOMAIN`, `DUFS_DOMAIN`, `BACKREST_DOMAIN`, `ARIA2_DOMAIN`, `LLDAP_DOMAIN`): Set these to the fully qualified domain names (FQDNs) you intend to use for each service (e.g., `auth.yourdomain.com`, `files.yourdomain.com`). Ensure these domains are configured in your Cloudflare DNS to point to your Cloudflare Tunnel.
 
 ### 3. Deployment
 
@@ -74,6 +82,7 @@ The following services are associated with specific profiles and will only run w
 - `backrest`: For the Backrest backup service.
 - `dufs`: For the DUFS file server.
 - `aria2`: For the Aria2 download manager.
+- `lldap`: For the LLDAP server.
 
 To start services associated with a specific profile, use the --profile (or -p) option:
 
@@ -109,3 +118,4 @@ Your services will be accessible via the domains you configured in your .env fil
 - DUFS: `https://${DUFS_DOMAIN}`
 - Backrest: `https://${BACKREST_DOMAIN}`
 - Aria2 (AriaNg UI): `https://${ARIA2_DOMAIN}`
+- LLDAP: `https://${LLDAP_DOMAIN}`

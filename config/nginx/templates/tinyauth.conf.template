@@ -1,6 +1,9 @@
 server {
-    listen 80;
+    listen 443 ssl;
     server_name ${TINYAUTH_DOMAIN};
+
+    ssl_certificate /etc/nginx/ssl/server.crt;
+    ssl_certificate_key /etc/nginx/ssl/server.key;
 
     location / {
         proxy_pass http://tinyauth:3000;

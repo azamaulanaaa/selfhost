@@ -61,8 +61,6 @@ The services rely on environment variables for configuration.
     - LLDAP Configuration (`LLDAP_JWT_SECRET`, `LLDAP_KEY_SEED`, `LLDAP_LDAP_BASE_DN`, `LLDAP_LDAP_USER_EMAIL`, `LLDAP_LDAP_USER_PASS`):
         - `LLDAP_JWT_SECRET`: A strong, random key for LLDAP's JWT signing. Generate using: `openssl rand -base64 32`
         - `LLDAP_KEY_SEED`: A random seed for LLDAP key generation. Generate using: `head /dev/urandom | tr -dc A-Za-z0-9_ | head -c 32 ; echo`
-        - `LLDAP_LDAP_BASE_DN`: The base distinguished name for your LDAP directory (e.g., `dc=example,dc=com`). `dc=local` is a common default for simple setups.
-        - `LLDAP_LDAP_USER_EMAIL`: The email address for the initial LLDAP admin user. `admin@local` is a common default for simple setups
         - `LLDAP_LDAP_USER_PASS`: The password for the initial LLDAP admin user.
     - Domain Variables (`TINYAUTH_DOMAIN`, `DUFS_DOMAIN`, `BACKREST_DOMAIN`, `ARIA2_DOMAIN`, `LLDAP_DOMAIN`): Set these to the fully qualified domain names (FQDNs) you intend to use for each service (e.g., `auth.yourdomain.com`, `files.yourdomain.com`). Ensure these domains are configured in your Cloudflare DNS to point to your Cloudflare Tunnel.
 

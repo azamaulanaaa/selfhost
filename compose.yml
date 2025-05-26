@@ -165,10 +165,9 @@ services:
     environment:
       - LLDAP_JWT_SECRET=${LLDAP_JWT_SECRET}
       - LLDAP_KEY_SEED=${LLDAP_KEY_SEED}
-      - LLDAP_LDAP_BASE_DN=${LLDAP_LDAP_BASE_DN}
-      - LLDAP_LDAP_USER_EMAIL=${LLDAP_LDAP_USER_EMAIL}
       - LLDAP_LDAP_USER_PASS=${LLDAP_LDAP_USER_PASS}
     volumes:
       - ./data/lldap:/data
+      - ./config/lldap/lldap_config.toml:/data/lldap_config.toml
     profiles:
       - lldap

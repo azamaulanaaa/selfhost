@@ -22,7 +22,6 @@ services:
     volumes:
       - ./config/tinyproxy/tinyproxy.conf:/etc/tinyproxy/tinyproxy.conf:ro
     extra_hosts:
-      - ${TINYAUTH_DOMAIN}:10.5.0.11
       - ${BACKREST_DOMAIN}:10.5.0.11
       - ${DUFS_DOMAIN}:10.5.0.11
       - ${ARIA2_DOMAIN}:10.5.0.11
@@ -58,37 +57,17 @@ services:
       - ./config/nginx/templates/:/etc/nginx/templates/:ro
       - ./config/nginx/cert/:/etc/nginx/ssl/:ro
     environment:
-      - TINYAUTH_DOMAIN=${TINYAUTH_DOMAIN}
       - BACKREST_DOMAIN=${BACKREST_DOMAIN}
       - DUFS_DOMAIN=${DUFS_DOMAIN}
       - ARIA2_DOMAIN=${ARIA2_DOMAIN}
       - LLDAP_DOMAIN=${LLDAP_DOMAIN}
     extra_hosts:
-      - tinyauth:10.5.0.101
       - backrest:10.5.0.102
       - dufs:10.5.0.103
       - aria2:10.5.0.104
       - lldap:10.5.0.105
     profiles:
       - nginx
-  tinyauth:
-    container_name: tinyauth
-    image: ghcr.io/steveiliop56/tinyauth:v3
-    restart: unless-stopped
-    deploy:
-      resources:
-        limits:
-          memory: 16m
-    networks:
-      main:
-        ipv4_address: 10.5.0.101
-    environment:
-      - DISABLE_CONTINUE=true
-      - APP_URL=https://${TINYAUTH_DOMAIN}
-      - SECRET=${TINYAUTH_SECRET}
-      - USERS=${TINYAUTH_USERS}
-    profiles:
-      - tinyauth
   backrest:
     container_name: backrest
     image: garethgeorge/backrest

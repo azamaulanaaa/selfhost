@@ -26,6 +26,7 @@ services:
       - ${DUFS_DOMAIN}:10.5.0.11
       - ${ARIA2_DOMAIN}:10.5.0.11
       - ${LLDAP_DOMAIN}:10.5.0.11
+      - ${AUTHELIA_DOMAIN}:10.5.0.11
   cloudflared:
     container_name: cloudflared
     image: cloudflare/cloudflared
@@ -61,11 +62,13 @@ services:
       - DUFS_DOMAIN=${DUFS_DOMAIN}
       - ARIA2_DOMAIN=${ARIA2_DOMAIN}
       - LLDAP_DOMAIN=${LLDAP_DOMAIN}
+      - AUTHELIA_DOMAIN=${AUTHELIA_DOMAIN}
     extra_hosts:
       - backrest:10.5.0.102
       - dufs:10.5.0.103
       - aria2:10.5.0.104
       - lldap:10.5.0.105
+      - authelia:10.5.0.106
     profiles:
       - nginx
   backrest:
@@ -150,3 +153,27 @@ services:
       - ./config/lldap/lldap_config.toml:/data/lldap_config.toml
     profiles:
       - lldap
+  authelia:
+    container_name: authelia
+    image: authelia/authelia:latest
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 40m
+    networks:
+      main:
+        ipv4_address: 10.5.0.106
+    extra_hosts:
+      - lldap:10.5.0.105
+    environment:
+      - X_AUTHELIA_CONFIG_FILTERS=template
+      - AUTHELIA_IDENTITY_VALIDATION_RESET_PASSWORD_JWT_SECRET=${AUTHELIA_IDENTITY_VALIDATION_RESET_PASSWORD_JWT_SECRET}
+      - AUTHELIA_SESSION_SECRET=${AUTHELIA_SESSION_SECRET}
+      - AUTHELIA_STORAGE_ENCRYPTION_KEY=${AUTHELIA_STORAGE_ENCRYPTION_KEY}
+      - USER_DOMAIN=${AUTHELIA_DOMAIN}
+      - USER_SESSION_DOMAIN=${AUTHELIA_SESSION_DOMAIN}
+      - USER_LDAP_PASSWORD=${LLDAP_LDAP_USER_PASS}
+    volumes:
+      - ./config/authelia:/config
+      - ./data/authelia:/data

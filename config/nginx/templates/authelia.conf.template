@@ -1,0 +1,22 @@
+server {
+    listen 443 ssl;
+    http2 on;
+    server_name ${AUTHELIA_DOMAIN};
+
+    include /etc/nginx/conf.d/ssl.include;
+
+    set $upstream http://10.5.0.106:9091;
+
+    location / {
+        proxy_pass $upstream;
+        include /etc/nginx/conf.d/authelia-proxy.include;
+    }
+
+    location = /api/verify {
+        proxy_pass $upstream;
+    }
+
+    location /api/authz/ {
+        proxy_pass $upstream;
+    }
+}

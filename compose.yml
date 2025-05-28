@@ -177,3 +177,5 @@ services:
     volumes:
       - ./config/authelia:/config
       - ./data/authelia:/data
+    profiles:
+      - authelia

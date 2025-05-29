@@ -2,12 +2,10 @@
 
 This repository provides a streamlined Docker Compose setup for easily deploying and managing a collection of essential self-hosted services. With this configuration, you can quickly get your personal cloud infrastructure up and running, securely exposed to the internet via Cloudflare Tunnel.
 
-
 ## Services
 
 This suite includes the following services, designed to work together for a robust self-hosting experience:
 
-- **Authelia**: An open-source authentication and authorization server that provides a single sign-on (SSO) portal and two-factor authentication (2FA) for your applications.
 - **TinyProxy**: A simple HTTP/HTTPS proxy for basic network forwarding.
 - **Cloudflared**: Establishes a secure, outbound-only connection to Cloudflare's network, allowing you to expose your local services to the internet without opening inbound firewall ports.
 - **Nginx**: A high-performance web server and reverse proxy, used here to route incoming traffic to the correct internal services.
@@ -15,6 +13,7 @@ This suite includes the following services, designed to work together for a robu
 - **DUFS**: A straightforward file server for convenient uploading and downloading of files.
 - **Aria2**: A versatile command-line download manager, integrated with AriaNg for a user-friendly web UI.
 - **LLDAP**: A lightweight LDAP server for centralized user directory management.
+- **Authelia**: An open-source authentication and authorization server that provides a single sign-on (SSO) portal and two-factor authentication (2FA) for your applications.
 
 ## Prerequisites
 

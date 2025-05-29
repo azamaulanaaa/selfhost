@@ -55,6 +55,8 @@ By default, when no profiles are specified, Docker Compose runs services that do
 
 - `tinyproxy`
 
+There is also a dynamic profile named "enable". Services associated with this profile are dynamically included based on the ENABLE_{SERVICE_NAME} environment variables defined in your .env file. For example, if you set ENABLE_DUFS="1" in your .env file, the `dufs` service will be included when the "enable" profile is activated. This allows for flexible enablement of services with single profile.
+
 The following services are associated with specific profiles and will only run when their respective profile (or a combination of profiles) is explicitly activated:
 
 - `nginx`: For the Nginx reverse proxy.

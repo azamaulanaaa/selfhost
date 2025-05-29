@@ -14,6 +14,7 @@ This suite includes the following services, designed to work together for a robu
 - **Backrest**: A flexible and powerful backup solution to ensure the safety of your data.
 - **DUFS**: A straightforward file server for convenient uploading and downloading of files.
 - **Aria2**: A versatile command-line download manager, integrated with AriaNg for a user-friendly web UI.
+- **LLDAP**: A lightweight LDAP server for centralized user directory management.
 
 ## Prerequisites
 

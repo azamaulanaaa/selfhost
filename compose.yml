@@ -41,8 +41,7 @@ services:
         ipv4_address: 10.5.0.12
     environment:
       - TUNNEL_TOKEN=${CLOUDFLARED_TOKEN}
-    profiles:
-      - cloudflared
+    profiles: ["cloudflared", "${ENABLE_CLOUDFLARED:+enable}"]
   nginx:
     container_name: nginx
     image: nginx
@@ -69,8 +68,7 @@ services:
       - aria2:10.5.0.104
       - lldap:10.5.0.105
       - authelia:10.5.0.106
-    profiles:
-      - nginx
+    profiles: ["nginx", "${ENABLE_NGINX:+enable}"]
   backrest:
     container_name: backrest
     image: garethgeorge/backrest
@@ -92,8 +90,7 @@ services:
       - BACKREST_DATA=/data
       - BACKREST_CONFIG=/config/config.json
       - XDG_CACHE_HOME=/cache
-    profiles:
-      - backrest
+    profiles: ["backrest", "${ENABLE_BACKREST:+enable}"]
   dufs:
     container_name: dufs
     image: sigoden/dufs
@@ -112,8 +109,7 @@ services:
     environment:
       - DUFS_CONFIG=/config/config.yaml
       - DUFS_SERVE_PATH=/data
-    profiles:
-      - dufs
+    profiles: ["dufs", "${ENABLE_DUFS:+enable}"]
   aria2:
     container_name: aria2
     image: hurlenko/aria2-ariang
@@ -131,8 +127,7 @@ services:
       - ./config/aria2:/aria2/conf:ro
       - ./data/aria2/data:/aria2/data
       - ./data/aria2/session:/aria2/session
-    profiles:
-      - aria2
+    profiles: ["aria2", "${ENABLE_ARIA2:+enable}"]
   lldap:
     container_name: lldap
     image: lldap/lldap:stable
@@ -151,8 +146,7 @@ services:
     volumes:
       - ./data/lldap:/data
       - ./config/lldap/lldap_config.toml:/data/lldap_config.toml
-    profiles:
-      - lldap
+    profiles: ["lldap", "${ENABLE_LLDAP:+enable}"]
   authelia:
     container_name: authelia
     image: authelia/authelia:latest
@@ -177,5 +171,4 @@ services:
     volumes:
       - ./config/authelia:/config
       - ./data/authelia:/data
-    profiles:
-      - authelia
+    profiles: ["authelia", "${ENABLE_AUTHELIA:+enable}"]

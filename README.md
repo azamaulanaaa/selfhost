@@ -1,14 +1,19 @@
 # SELFHOST
 
-This repository contains the Docker Compose configuration and environment variable templates for a suite of self-hosted services, including:
+This repository provides a streamlined Docker Compose setup for easily deploying and managing a collection of essential self-hosted services. With this configuration, you can quickly get your personal cloud infrastructure up and running, securely exposed to the internet via Cloudflare Tunnel.
 
-- TinyAuth: A lightweight authentication service.
-- TinyProxy: A simple HTTP/HTTPS proxy.
-- Cloudflared: Connects your services to Cloudflare Tunnel for secure, public access.
-- Nginx: A reverse proxy to route traffic to your services.
-- Backrest: A flexible backup solution.
-- DUFS (Dockerized Upload File Server): A simple file server for uploads and downloads.
-- Aria2: A versatile command-line download manager with a web UI (AriaNg).
+
+## Services
+
+This suite includes the following services, designed to work together for a robust self-hosting experience:
+
+- **Authelia**: An open-source authentication and authorization server that provides a single sign-on (SSO) portal and two-factor authentication (2FA) for your applications.
+- **TinyProxy**: A simple HTTP/HTTPS proxy for basic network forwarding.
+- **Cloudflared**: Establishes a secure, outbound-only connection to Cloudflare's network, allowing you to expose your local services to the internet without opening inbound firewall ports.
+- **Nginx**: A high-performance web server and reverse proxy, used here to route incoming traffic to the correct internal services.
+- **Backrest**: A flexible and powerful backup solution to ensure the safety of your data.
+- **DUFS**: A straightforward file server for convenient uploading and downloading of files.
+- **Aria2**: A versatile command-line download manager, integrated with AriaNg for a user-friendly web UI.
 
 ## Prerequisites
 
@@ -34,39 +39,17 @@ cd selfhost
 
 The services rely on environment variables for configuration.
 
-1. **Create the .env file**: Copy the `example.env` template to a new file named `.env` in the root of your repository:
+1. **Create the `.env` file**: Copy the `example.env` template to a new file named `.env` in the root of your repository:
 
    ```sh
    cp example.env .env
    ```
 
-2. **Edit .env**: Open the newly created .env file and populate it with your specific values. Pay close attention to the following:
-
-    - TinyAuth Configuration (`TINYAUTH_SECRET`, `TINYAUTH_USERS`):
-        - `TINYAUTH_SECRET`: This is a critical security key. It **MUST be exactly 32 characters long**. Generate a strong, random hexadecimal string.
-            - **Python**: `python -c 'import os; print(os.urandom(16).hex())'` (This generates 32 hex characters)
-            - **OpenSSL**: `openssl rand -hex 16` (This generates 32 hex characters)
-        - `TINYAUTH_USERS`: Define your user credentials in the format `username:hashed-password`. You can define multiple users separated by commas.
-            - **Generate Hashed Password**: Use the TinyAuth CLI tool to create a hashed password interactively:
-                ```sh
-                docker run -it --rm ghcr.io/steveiliop56/tinyauth:v3 user create --interactive
-                ```
-                Follow the prompts. For example, if you enter admin for username and admin for password, it will output a string like `admin:$$2a$$10$$tH5JnZZ/sfuLIZbO9xxW6uYwkqSI71GrZ..1aQYPM2viQRgbZLMiO`. Copy this entire string into your `.env` file.
-    - Cloudflared Configuration (`CLOUDFLARED_TOKEN`):
-        - `CLOUDFLARED_TOKEN`: Obtain this token from your Cloudflare dashboard when setting up a Cloudflare Tunnel.
-            1. Log in to your Cloudflare dashboard.
-            2. Navigate to 'Access' -> 'Tunnels'.
-            3. Create a new tunnel or select an existing one.
-            4. The token will be provided in the setup instructions (e.g., as part of the `cloudflared tunnel run <TUNNEL_NAME>` command).
-    - LLDAP Configuration (`LLDAP_JWT_SECRET`, `LLDAP_KEY_SEED`, `LLDAP_LDAP_BASE_DN`, `LLDAP_LDAP_USER_EMAIL`, `LLDAP_LDAP_USER_PASS`):
-        - `LLDAP_JWT_SECRET`: A strong, random key for LLDAP's JWT signing. Generate using: `openssl rand -base64 32`
-        - `LLDAP_KEY_SEED`: A random seed for LLDAP key generation. Generate using: `head /dev/urandom | tr -dc A-Za-z0-9_ | head -c 32 ; echo`
-        - `LLDAP_LDAP_USER_PASS`: The password for the initial LLDAP admin user.
-    - Domain Variables (`TINYAUTH_DOMAIN`, `DUFS_DOMAIN`, `BACKREST_DOMAIN`, `ARIA2_DOMAIN`, `LLDAP_DOMAIN`): Set these to the fully qualified domain names (FQDNs) you intend to use for each service (e.g., `auth.yourdomain.com`, `files.yourdomain.com`). Ensure these domains are configured in your Cloudflare DNS to point to your Cloudflare Tunnel.
+2. **Edit `.env` file**: Open the newly created `.env` file with a text editor. Carefully read and populate it with your specific values, paying close attention to the security-critical variables. The `example.env` file itself contains detailed comments, purpose descriptions, and examples for each variable, including how to generate necessary secrets. Refer directly to `example.env` for comprehensive guidance on each setting.
 
 ### 3. Deployment
 
-Your compose.yaml file utilizes Docker Compose profiles, which allow you to selectively start groups of services. This is useful for managing different environments or only running specific parts of your application.
+Your `compose.yaml` file utilizes Docker Compose profiles, which allow you to selectively start groups of services. This is useful for managing different environments or only running specific parts of your application.
 
 By default, when no profiles are specified, Docker Compose runs services that do not have a profiles key defined. In your setup, these services are:
 
@@ -75,12 +58,12 @@ By default, when no profiles are specified, Docker Compose runs services that do
 The following services are associated with specific profiles and will only run when their respective profile (or a combination of profiles) is explicitly activated:
 
 - `nginx`: For the Nginx reverse proxy.
-- `tinyauth`: For the Tinyauth authentication.
 - `cloudflared`: For the Cloudflared tunnel service.
 - `backrest`: For the Backrest backup service.
 - `dufs`: For the DUFS file server.
 - `aria2`: For the Aria2 download manager.
 - `lldap`: For the LLDAP server.
+- `authelia`: For the Authelia authentication service.
 
 To start services associated with a specific profile, use the --profile (or -p) option:
 
@@ -105,15 +88,21 @@ docker compose -f compose.yaml up -d cloudflared nginx
 To stop all services:
 
 ```sh
-docker compose -f compose.yaml --profile "*" down
+docker compose -f compose.yaml down --remove-orphans
 ```
 
 ## Accessing Your Services
 
-Your services will be accessible via the domains you configured in your .env file, routed through Cloudflare Tunnel.
+Once deployed, your services can be accessed in two primary ways, depending on your network configuration and whether you're exposing them publicly or internally:
 
-- TinyAuth: `https://${TINYAUTH_DOMAIN}`
+- **Via Cloudflare Tunnel (Public Access)**: If you have enabled `cloudflared` and configured your domains in Cloudflare DNS to point to your Cloudflare Tunnel, your services will be securely accessible over the internet via the domains you configured in your `.env` file.
+
+- **Via TinyProxy (Internal/Local Network Access)**: The `tinyproxy` service runs by default and can be used to access your services from within your local network or from machines that can reach your server directly (e.g., via VPN). You can configure your local devices to use `tinyproxy` as an HTTP/HTTPS proxy, allowing you to access your services using the same domains defined in your `.env` file, even without public Cloudflare Tunnel exposure.
+
+Here are the domains for each service:
+
 - DUFS: `https://${DUFS_DOMAIN}`
 - Backrest: `https://${BACKREST_DOMAIN}`
 - Aria2 (AriaNg UI): `https://${ARIA2_DOMAIN}`
 - LLDAP: `https://${LLDAP_DOMAIN}`
+- Authelia: `https://${AUTHELIA_DOMAIN}`

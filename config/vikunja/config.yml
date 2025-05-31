@@ -6,3 +6,4 @@ auth:
     providers:
       AUTHELIA:
         name: 'Authelia'
+        forceuserinfo: true

@@ -640,36 +640,36 @@ authentication_backend:
 ##
 ## Password Policy Configuration.
 ##
-password_policy:
+# password_policy:
 
   ## The standard policy allows you to tune individual settings manually.
-  standard:
-    enabled: false
+  # standard:
+    # enabled: false
 
     ## Require a minimum length for passwords.
-    min_length: 8
+    # min_length: 8
 
     ## Require a maximum length for passwords.
-    max_length: 0
+    # max_length: 0
 
     ## Require uppercase characters.
-    require_uppercase: true
+    # require_uppercase: true
 
     ## Require lowercase characters.
-    require_lowercase: true
+    # require_lowercase: true
 
     ## Require numeric characters.
-    require_number: true
+    # require_number: true
 
     ## Require special characters.
-    require_special: true
+    # require_special: true
 
   ## zxcvbn is a well known and used password strength algorithm. It does not have tunable settings.
-  zxcvbn:
-    enabled: false
+  # zxcvbn:
+    # enabled: false
 
     ## Configures the minimum score allowed.
-    min_score: 3
+    # min_score: 3
 
 ##
 ## Privacy Policy Configuration
@@ -1003,7 +1003,7 @@ storage:
   ## The encryption key that is used to encrypt sensitive information in the database. Must be a string with a minimum
   ## length of 20. Please see the docs if you configure this with an undesirable key and need to change it, you MUST use
   ## the CLI to change this in the database if you want to change it from a previously configured value.
-  encryption_key: 'you_must_generate_a_random_string_of_more_than_twenty_chars_and_configure_this'
+  # encryption_key: 'you_must_generate_a_random_string_of_more_than_twenty_chars_and_configure_this'
 
   ##
   ## Local (Storage Provider)
@@ -1296,6 +1296,7 @@ identity_providers:
         # -----BEGIN PRIVATE KEY-----
         # ...
         # -----END PRIVATE KEY-----
+      key: {{ secret "/config/cert/private.pem" | mindent 10 "|" | msquote }}
 
 
       ## Optional matching certificate chain in PEM DER form that matches the key. All certificates within the chain

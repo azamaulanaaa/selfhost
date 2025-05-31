@@ -721,7 +721,15 @@ access_control:
   # default_policy: 'deny'
   default_policy: 'one_factor'
 
-  # rules:
+  rules:
+    - domain: '{{ env "BACKREST_DOMAIN" }}'
+      policy: 'one_factor'
+      subject:
+        - 'group:lldap_admin'
+
+    - domain: '{{ env "BACKREST_DOMAIN" }}'
+      policy: 'deny'
+
     ## Rules applied to everyone
     # - domain: 'public.example.com'
     #   policy: 'bypass'

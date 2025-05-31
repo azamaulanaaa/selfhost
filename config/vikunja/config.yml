@@ -1,9 +1,16 @@
 auth:
   local:
     enabled: false
-  openid:
+  ldap:
     enabled: true
-    providers:
-      AUTHELIA:
-        name: 'Authelia'
-        forceuserinfo: true
+    host: 'lldap'
+    port: 3890
+    basedn: 'ou=people,dc=local'
+    userfilter: '(&(uid=%[1]s)(objectClass=person))'
+    usetls: false
+    binddn: 'uid=admin,ou=people,dc=local'
+    avatarsyncattribute: 'jpegPhoto'
+    attribute:
+      username: 'uid'
+      email: 'mail'
+      displayName: 'displayName'

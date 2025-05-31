@@ -1,0 +1,8 @@
+auth:
+  local:
+    enabled: false
+  openid:
+    enabled: true
+    providers:
+      AUTHELIA:
+        name: 'Authelia'

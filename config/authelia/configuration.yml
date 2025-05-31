@@ -1265,22 +1265,22 @@ notifier:
 ##
 ## Identity Providers
 ##
-# identity_providers:
+identity_providers:
 
   ##
   ## OpenID Connect (Identity Provider)
   ##
   ## It's recommended you read the documentation before configuration of this section.
   ## See: https://www.authelia.com/c/oidc/provider
-  # oidc:
+  oidc:
     ## The hmac_secret is used to sign OAuth2 tokens (authorization code, access tokens and refresh tokens).
     ## HMAC Secret can also be set using a secret: https://www.authelia.com/c/secrets
     # hmac_secret: 'this_is_a_secret_abc123abc123abc'
 
     ## The JWK's issuer option configures multiple JSON Web Keys. It's required that at least one of the JWK's
     ## configured has the RS256 algorithm. For RSA keys (RS or PS) the minimum is a 2048 bit key.
-    # jwks:
-    # -
+    jwks:
+    -
       ## Key ID embedded into the JWT header for key matching. Must be an alphanumeric string with 7 or less characters.
       ## This value is automatically generated if not provided. It's recommended to not configure this.
       # key_id: 'example'
@@ -1375,7 +1375,14 @@ notifier:
     ## Clients is a list of registered clients and their configuration.
     ## It's recommended you read the documentation before configuration of a registered client.
     ## See: https://www.authelia.com/c/oidc/registered-clients
-    # clients:
+    clients:
+      -
+        client_name: 'vikunja'
+        client_id: '{{ env "VIKUNJA_CLIENTID" }}'
+        client_secret: '{{ env "VIKUNJA_CLIENTSECRET" }}'
+        redirect_uris: 'https://{{ env "VIKUNJA_DOMAIN" }}/auth/openid/authelia'
+        authorization_policy: 'one_factor'
+        consent_mode: 'implicit'
       # -
         ## The Client ID is the OAuth 2.0 and OpenID Connect 1.0 Client ID which is used to link an application to a
         ## configuration.

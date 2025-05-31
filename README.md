@@ -14,6 +14,7 @@ This suite includes the following services, designed to work together for a robu
 - **Aria2**: A versatile command-line download manager, integrated with AriaNg for a user-friendly web UI.
 - **LLDAP**: A lightweight LDAP server for centralized user directory management.
 - **Authelia**: An open-source authentication and authorization server that provides a single sign-on (SSO) portal and two-factor authentication (2FA) for your applications.
+- **Vikunja**: An open-source, self-hostable to-do app that helps you organize your tasks and projects.
 
 ## Prerequisites
 
@@ -66,6 +67,7 @@ The following services are associated with specific profiles and will only run w
 - `aria2`: For the Aria2 download manager.
 - `lldap`: For the LLDAP server.
 - `authelia`: For the Authelia authentication service.
+- `vikunja`: For the Vikunja task management service.
 
 To start services associated with a specific profile, use the --profile (or -p) option:
 
@@ -108,3 +110,4 @@ Here are the domains for each service:
 - Aria2 (AriaNg UI): `https://${ARIA2_DOMAIN}`
 - LLDAP: `https://${LLDAP_DOMAIN}`
 - Authelia: `https://${AUTHELIA_DOMAIN}`
+- Vikunja: `https://${VIKUNJA_DOMAIN}`

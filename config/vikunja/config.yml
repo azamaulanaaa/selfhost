@@ -6,7 +6,7 @@ auth:
     host: 'lldap'
     port: 3890
     basedn: 'ou=people,dc=local'
-    userfilter: '(&(uid=%[1]s)(objectClass=person))'
+    userfilter: '(&(|(uid=%[1]s)(mail=%[1]s))(objectClass=person))'
     usetls: false
     binddn: 'uid=admin,ou=people,dc=local'
     avatarsyncattribute: 'jpegPhoto'
